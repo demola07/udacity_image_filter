@@ -18,7 +18,7 @@ export async function filterImageFromURL(inputURL: string): Promise<string> {
         .resize(256, 256) // resize
         .quality(60) // set JPEG quality
         .greyscale() // set greyscale
-        .write(__dirname + outpath, (im) => {
+        .write(__dirname + outpath, (img) => {
           resolve(__dirname + outpath);
         });
     } catch (error) {
@@ -38,3 +38,6 @@ export async function deleteLocalFiles(files: Array<string>) {
   }
 }
 
+export function isValidImage(url: string) {
+  return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+}
