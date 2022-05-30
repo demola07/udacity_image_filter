@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { filterImageFromURL, deleteLocalFiles, isValidImage } from './util/util';
 
@@ -29,13 +29,22 @@ import { filterImageFromURL, deleteLocalFiles, isValidImage } from './util/util'
 
   /**************************************************************************** */
 
-  app.get("/filteredimage", async (req: Request, res: Response) => {
-    const image: string = req.query.image_url;
-    if (!image) return res.status(404).send('image not found');
+  app.get("/filteredimage", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const image: string = req.query.image_url;
+      if (!image) return res.status(404).send('image not found');
 
-    const isValid: boolean = isValidImage(image);
-    if (!isValid) return res.status(404).send('url id not a valid image url');
-    return res.send(image);
+      const isValid: boolean = isValidImage(image);
+      if (!isValid) return res.status(404).send('url is not a valid image url');
+
+      const filteredImagePath: string = await filterImageFromURL(image);
+      res.status(200).sendFile(filteredImagePath, (err) => {
+        if (err) next(err);
+        deleteLocalFiles([filteredImagePath]);
+      });
+    } catch (error) {
+      return res.status(500).send('Unable to process your request!!!');
+    }
   });
 
   //! END @TODO1
