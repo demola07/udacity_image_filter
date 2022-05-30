@@ -46,4 +46,4 @@ export async function deleteLocalFiles(files: Array<string>) {
 //    a boolean value, true if url is valid and false if invalid
 export function isValidImage(url: string) {
   return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
-}
+};
