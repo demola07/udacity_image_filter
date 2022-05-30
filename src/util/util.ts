@@ -38,6 +38,12 @@ export async function deleteLocalFiles(files: Array<string>) {
   }
 }
 
+// isValidImage
+// helper function using regex to help check if the image url is a vaild url
+// INPUTS
+//    url: string - a publicly accessible url to an image file
+// RETURNS
+//    a boolean value, true if url is valid and false if invalid
 export function isValidImage(url: string) {
   return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
 }
